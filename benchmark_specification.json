@@ -15,6 +15,11 @@
     "value": "AMD"
   },
   {
+    "field_name": "OS Version",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Ubuntu 26.04"
+  },
+  {
     "field_name": "Repo Name",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "gpu-bench-amd-sglang-prompt-response-ubu2604"
@@ -140,11 +145,6 @@
     "value": "Bash, SQLite, Python, PyYAML, ROCm Runtime, PyTorch-ROCm, Hugging Face Transformers, SGLang, Mistral-7B-v0.3, aiter"
   },
   {
-    "field_name": "OS Version",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Ubuntu 26.04"
-  },
-  {
     "field_name": "Kernel Version",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "kernel 7.0.0"
@@ -162,17 +162,17 @@
   {
     "field_name": "Python Version",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Python 3.14.4"
+    "value": "Python 3.14.N (uv-managed; all benchmark venvs; same build as 24.04). System python3.14 retained for OS and setup scripts only"
   },
   {
     "field_name": "GPU Runtime Version (was ROCm Version)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "ROCm 7.14"
+    "value": "ROCm 10.1.0"
   },
   {
     "field_name": "BLAS Version (was rocBLAS version)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "rocBLAS 5.2.0"
+    "value": "rocBLAS 5.7.0"
   },
   {
     "field_name": "Mistral-7B Version",
@@ -182,7 +182,7 @@
   {
     "field_name": "PyTorch Version",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "PyTorch 2.12.1+rocm7.2"
+    "value": "PyTorch 2.13.0+rocm10.1.0"
   },
   {
     "field_name": "torchvision Version",
@@ -202,12 +202,12 @@
   {
     "field_name": "SGLang Version",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "0.0.0.dev1+g61057bda6.d20260726"
+    "value": "0.5.18"
   },
   {
     "field_name": "SGLang Repository/Commit",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "https://github.com/sgl-project/sglang.git @ 61057bda6c4b8cda1117d74f100d0735645c0cfb"
+    "value": "https://github.com/sgl-project/sglang.git @ v0.5.18; commit 71de97b264b04dcd514cf904003028aefe9775c8"
   },
   {
     "field_name": "Cmake Version",
@@ -337,7 +337,7 @@
   {
     "field_name": "System Monitoring Tool",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "rocm-smi"
+    "value": "amd-smi"
   },
   {
     "field_name": "Validation & Diagnostics Suite",
@@ -377,12 +377,12 @@
   {
     "field_name": "ROCm Version",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "ROCm 7.14"
+    "value": "ROCm 10.1.0"
   },
   {
     "field_name": "rocBLAS Version",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "rocBLAS 5.2.0"
+    "value": "rocBLAS 5.7.0"
   },
   {
     "field_name": "Execution Summary (Run and Measure)",
