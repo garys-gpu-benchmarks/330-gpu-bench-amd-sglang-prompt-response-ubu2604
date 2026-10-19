@@ -436,6 +436,8 @@ def classify_na(metric_key: str, reason: str, context: dict) -> str:
         return "expected"
     if "perf_event_paranoid" in text or "pmu access denied" in text:
         return "expected"
+    if "llc load counters unavailable" in text:
+        return "expected"
     if "timed loop too short" in text or "timed loop shorter" in text:
         if str(context.get("profile") or "").lower() == "smoke" or "expected:" in text:
             return "expected"
