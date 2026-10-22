@@ -90,16 +90,16 @@ Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mi
 ## 2. What It Validates
 
 - Validates sequential one-request-at-a-time prompt responses, including latency, token rate, and cache-hit reporting. This is not concurrent serving. Smoke uses scripts/tiny_sglang_server.py; baseline and extended use sglang.launch_server
-- #1: E2E latency, ms (end_to_end_latency_ms); is present and physically sensible.
-- #2: Time To First Token (ttft_ms); is present and physically sensible.
-- #3: Output token generation rate (decode), tokens/s (output_tokens_per_s); is present and physically sensible.
+- #1: E2E latency p50, ms (end_to_end_latency_ms); is present and physically sensible.
+- #2: Time To First Token p50, ms (ttft_ms); is present and physically sensible.
+- #3: Output token generation rate (decode) p50, tokens/s (output_tokens_per_s); is present and physically sensible.
 - #4: RadixAttn hit rate, pct (radixattention_cache_hit_rate_pct); is present and physically sensible.
 - #5: Completed request rate, pct (completed_request_rate_pct) is present and physically sensible.
 
 ## 3. Metrics Captured
 
-- **#1: E2E latency, ms** — stored as `end_to_end_latency_ms`.
-- **#2: Time To First Token** — stored as `ttft_ms`.
+- **#1: E2E latency p50, ms** — stored as `end_to_end_latency_ms`.
+- **#2: Time To First Token p50, ms** — stored as `ttft_ms`.
 - **#3: Output token generation rate** — stored as `decode`.
 - **#4: RadixAttn hit rate, pct** — stored as `radixattention_cache_hit_rate_pct`.
 - **#5: Completed request rate, pct** — stored as `completed_request_rate_pct`.

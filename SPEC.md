@@ -11,7 +11,7 @@ Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mi
 | dtype | `--dtype` | smoke=bfloat16, baseline=bfloat16, extended=bfloat16 | bfloat16 | From Parameter list; see Execution Description With Parameters. |
 | input_len | `--input-len` | smoke=64, baseline=512, extended=1024 | 512 | From Parameter list; see Execution Description With Parameters. |
 | output_len | `--output-len` | smoke=16, baseline=750, extended=5270 | 750 | From Parameter list; see Execution Description With Parameters. |
-| num_prompts | `--num-prompts` | smoke=2, baseline=8, extended=8 | 8 | From Parameter list; see Execution Description With Parameters. |
+| num_prompts | `--num-prompts` | smoke=2, baseline=5, extended=8 | 5 | From Parameter list; see Execution Description With Parameters. |
 | seed | `--seed` | smoke=42, baseline=42, extended=42 | 42 | From Parameter list; see Execution Description With Parameters. |
 | streaming | `--streaming` | smoke=true, baseline=true, extended=true | true | From Parameter list; see Execution Description With Parameters. |
 
@@ -30,8 +30,8 @@ request_id,sample_index,status,input_tokens,output_tokens,end_to_end_latency_ms,
 
 ## Metrics
 
-- **#1: E2E latency, ms** — stored as `end_to_end_latency_ms`.
-- **#2: Time To First Token** — stored as `ttft_ms`.
+- **#1: E2E latency p50, ms** — stored as `end_to_end_latency_ms`.
+- **#2: Time To First Token p50, ms** — stored as `ttft_ms`.
 - **#3: Output token generation rate** — stored as `decode`.
 - **#4: RadixAttn hit rate, pct** — stored as `radixattention_cache_hit_rate_pct`.
 - **#5: Completed request rate, pct** — stored as `completed_request_rate_pct`.

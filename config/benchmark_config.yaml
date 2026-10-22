@@ -19,7 +19,7 @@ sweep:
     extended: 5270
   num_prompts:
     smoke: 2
-    baseline: 8
+    baseline: 5
     extended: 8
   seed: 42
   streaming: true

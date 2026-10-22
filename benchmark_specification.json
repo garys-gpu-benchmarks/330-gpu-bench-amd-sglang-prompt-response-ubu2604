@@ -37,7 +37,7 @@
   {
     "field_name": "Metrics",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "#1: E2E latency, ms (end_to_end_latency_ms); #2: Time To First Token (ttft_ms); #3: Output token generation rate (decode), tokens/s (output_tokens_per_s); #4: RadixAttn hit rate, pct (radixattention_cache_hit_rate_pct); #5: Completed request rate, pct (completed_request_rate_pct)"
+    "value": "#1: E2E latency p50, ms (end_to_end_latency_ms); #2: Time To First Token p50, ms (ttft_ms); #3: Output token generation rate (decode) p50, tokens/s (output_tokens_per_s); #4: RadixAttn hit rate, pct (radixattention_cache_hit_rate_pct); #5: Completed request rate, pct (completed_request_rate_pct)"
   },
   {
     "field_name": "Command Tools Executed",
@@ -107,7 +107,7 @@
   {
     "field_name": "run_benchmark Command Plus Options for Baseline Run",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "bash run_benchmark.sh --baseline --validate --dtype bfloat16 --input-len 512 --output-len 750 --num-prompts 8 --seed 42 --streaming true"
+    "value": "bash run_benchmark.sh --baseline --validate --dtype bfloat16 --input-len 512 --output-len 750 --num-prompts 5 --seed 42 --streaming true"
   },
   {
     "field_name": "run_benchmark Command Plus Options for Extended Run",
@@ -127,7 +127,7 @@
   {
     "field_name": "Parser and Normalization Notes",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Locked overlay parse_results.py. Means use successful requests only. output_tokens_per_s is the decode rate, (output tokens - 1) / (end-to-end - TTFT); output tokens are the server's usage.completion_tokens, else the streamed text-chunk count. RadixAttention hit rate = total cached prompt tokens / total prompt tokens over successful requests (usage.prompt_tokens_details.cached_tokens, returned with --enable-cache-report); prompts share a common first half by design, so about 50% is expected once warm. completed_request_rate_pct = successful / attempted requests. Unmeasured values read na (reason): no cached counts (smoke server), no streaming (TTFT and decode rate), request failed"
+    "value": "Locked overlay parse_results.py. Summaries use successful requests only: end-to-end latency, TTFT and output_tokens_per_s are the median (p50) of the timed requests, so one slow request cannot dominate. output_tokens_per_s is the decode rate, (output tokens - 1) / (end-to-end - TTFT); output tokens are the server's usage.completion_tokens, else the streamed text-chunk count. RadixAttention hit rate = total cached prompt tokens / total prompt tokens over successful requests (usage.prompt_tokens_details.cached_tokens, returned with --enable-cache-report); prompts share a common first half by design, so about 50% is expected once warm. completed_request_rate_pct = successful / attempted requests. Unmeasured values read na (reason): no cached counts (smoke server), no streaming (TTFT and decode rate), request failed"
   },
   {
     "field_name": "Hardware Config",
@@ -407,7 +407,7 @@
   {
     "field_name": "Profile Parameter Values",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Parameters_SmokeBaselineExtend",
-    "value": "{\"dtype\": {\"smoke\": \"bfloat16\", \"baseline\": \"bfloat16\", \"extended\": \"bfloat16\", \"notes\": \"\"}, \"input_len\": {\"smoke\": \"64\", \"baseline\": \"512\", \"extended\": \"1024\", \"notes\": \"\"}, \"output_len\": {\"smoke\": \"16\", \"baseline\": \"750\", \"extended\": \"5270\", \"notes\": \"AMD Ubuntu 26.04 sibling of 130. Same 2026-09-09 MI300X real-SGLang output_len (1560/6100). 26.04 / ROCm 7.14 not remeasured. num_prompts stays 8.\"}, \"num_prompts\": {\"smoke\": \"2\", \"baseline\": \"8\", \"extended\": \"8\", \"notes\": \"Sequential prompt-response: 8 prompts at ~40s/req on MI300X stays near the 3-5 min baseline.\"}, \"seed\": {\"smoke\": \"42\", \"baseline\": \"42\", \"extended\": \"42\", \"notes\": \"\"}, \"streaming\": {\"smoke\": \"true\", \"baseline\": \"true\", \"extended\": \"true\", \"notes\": \"\"}}"
+    "value": "{\"dtype\": {\"smoke\": \"bfloat16\", \"baseline\": \"bfloat16\", \"extended\": \"bfloat16\", \"notes\": \"\"}, \"input_len\": {\"smoke\": \"64\", \"baseline\": \"512\", \"extended\": \"1024\", \"notes\": \"\"}, \"output_len\": {\"smoke\": \"16\", \"baseline\": \"750\", \"extended\": \"5270\", \"notes\": \"AMD Ubuntu 26.04 sibling of 130. Same 2026-09-09 MI300X real-SGLang output_len (1560/6100). 26.04 / ROCm 7.14 not remeasured. num_prompts stays 8.\"}, \"num_prompts\": {\"smoke\": \"2\", \"baseline\": \"5\", \"extended\": \"8\", \"notes\": \"Sequential prompt-response: 8 prompts at ~40s/req on MI300X stays near the 3-5 min baseline. | 2026-10-22 baseline 8 -> 5. Kept identical to 130 (1xx/3xx parity). 330 took 4:52 at 8; about 4:14 at 5\"}, \"seed\": {\"smoke\": \"42\", \"baseline\": \"42\", \"extended\": \"42\", \"notes\": \"\"}, \"streaming\": {\"smoke\": \"true\", \"baseline\": \"true\", \"extended\": \"true\", \"notes\": \"\"}}"
   },
   {
     "field_name": "Profile Command Authorship",
