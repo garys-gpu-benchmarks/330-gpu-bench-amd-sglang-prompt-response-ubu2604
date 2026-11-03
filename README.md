@@ -85,7 +85,7 @@ Three operator scripts from [`garys-gpu-benchmarks/gpu-bench-suite`](https://git
 
 ## 1. Overview
 
-Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on baseline/extended (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py. output_format: csv Sweep dimensions: dtype, input_len, output_len, num_prompts, seed, streaming.
+Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on baseline/extended (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py. output_format: csv. Sweep dimensions: dtype, input_len, output_len, model_name, num_prompts, max_running_requests, max_total_tokens, seed.
 
 ## 2. What It Validates
 

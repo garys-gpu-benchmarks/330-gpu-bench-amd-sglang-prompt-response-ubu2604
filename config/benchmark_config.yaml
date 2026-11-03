@@ -17,9 +17,14 @@ sweep:
     smoke: 16
     baseline: 750
     extended: 5270
+  model_name: mistralai/Mistral-7B-v0.3
   num_prompts:
     smoke: 2
     baseline: 5
     extended: 8
+  max_running_requests: 1
+  max_total_tokens:
+    smoke: 2048
+    baseline: 16384
+    extended: 32768
   seed: 42
-  streaming: true

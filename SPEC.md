@@ -2,7 +2,7 @@
 
 ## Execution Description
 
-Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on baseline/extended (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py. output_format: csv Sweep dimensions: dtype, input_len, output_len, num_prompts, seed, streaming.
+Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on baseline/extended (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py. output_format: csv. Sweep dimensions: dtype, input_len, output_len, model_name, num_prompts, max_running_requests, max_total_tokens, seed.
 
 ## Parameters
 
@@ -11,9 +11,11 @@ Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mi
 | dtype | `--dtype` | smoke=bfloat16, baseline=bfloat16, extended=bfloat16 | bfloat16 | From Parameter list; see Execution Description With Parameters. |
 | input_len | `--input-len` | smoke=64, baseline=512, extended=1024 | 512 | From Parameter list; see Execution Description With Parameters. |
 | output_len | `--output-len` | smoke=16, baseline=750, extended=5270 | 750 | From Parameter list; see Execution Description With Parameters. |
+| model_name | `--model-name` | smoke=mistralai/Mistral-7B-v0.3, baseline=mistralai/Mistral-7B-v0.3, extended=mistralai/Mistral-7B-v0.3 | mistralai/Mistral-7B-v0.3 | From Parameter list; see Execution Description With Parameters. |
 | num_prompts | `--num-prompts` | smoke=2, baseline=5, extended=8 | 5 | From Parameter list; see Execution Description With Parameters. |
+| max_running_requests | `--max-running-requests` | smoke=1, baseline=1, extended=1 | 1 | From Parameter list; see Execution Description With Parameters. |
+| max_total_tokens | `--max-total-tokens` | smoke=2048, baseline=16384, extended=32768 | 16384 | From Parameter list; see Execution Description With Parameters. |
 | seed | `--seed` | smoke=42, baseline=42, extended=42 | 42 | From Parameter list; see Execution Description With Parameters. |
-| streaming | `--streaming` | smoke=true, baseline=true, extended=true | true | From Parameter list; see Execution Description With Parameters. |
 
 ## Invocation
 
