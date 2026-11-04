@@ -25,6 +25,11 @@
     "value": "gpu-bench-amd-sglang-prompt-response-ubu2604"
   },
   {
+    "field_name": "Repo Directory Name",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "330-gpu-bench-amd-sglang-prompt-response-ubu2604"
+  },
+  {
     "field_name": "Main Goal",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "Measure sequential SGLang prompt-response latency"
