@@ -21,7 +21,7 @@ Launch scripts/tiny_sglang_server.py on smoke, or python -m sglang.launch_server
 Measure sequential SGLang prompt-response latency
 
 ## Validation Objective
-Validates sequential one-request-at-a-time prompt responses, including latency, token rate, and cache-hit reporting. This is not concurrent serving. Smoke uses scripts/tiny_sglang_server.py; baseline and extended use sglang.launch_server
+Validates one-at-a-time SGLang prompt latency, token rate, and cache hits. Smoke uses the tiny server
 
 ## Workload Category
 LLM Inference & Serving

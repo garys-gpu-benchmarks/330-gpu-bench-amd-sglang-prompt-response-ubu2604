@@ -20,7 +20,7 @@ Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mi
 ## Invocation
 
 ```bash
-Smoke starts scripts/tiny_sglang_server.py; baseline and extended start python -m sglang.launch_server, then scripts/prompt_response_client.py
+Smoke starts tiny_sglang_server.py; later profiles start sglang.launch_server, then prompt_response_client.py
 ```
 
 ## Raw Output Format
@@ -49,7 +49,7 @@ Launch scripts/tiny_sglang_server.py on smoke, or python -m sglang.launch_server
 ## Platform Portability
 
 - **AMD (primary):** ```bash
-Smoke starts scripts/tiny_sglang_server.py; baseline and extended start python -m sglang.launch_server, then scripts/prompt_response_client.py
+Smoke starts tiny_sglang_server.py; later profiles start sglang.launch_server, then prompt_response_client.py
 ```
 - **NVIDIA:** Primary target is AMD ROCm. NVIDIA notes in this section are reference only and are not the execution path.
 
