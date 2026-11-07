@@ -3,12 +3,12 @@
 # Version: 1.0.0
 # Author: AI Agent GPU Benchmark Repo Generator
 # Date: 2026-08-27
-# Description: Smoke uses scripts/tiny_sglang_server.py; baseline/extended launch python -m sglang.launch_server.
+# Description: Every profile launches python -m sglang.launch_server; smoke uses the smallest request sizes.
 # Execution: bash run_benchmark.sh [--smoke|--baseline|--extended]
 # Options: --smoke, --baseline, --extended, --config, --quiet, --log-level, --dtype, --input-len, --output-len, --num-prompts, --seed, --streaming, --specification, --help
 # Requirements: bash, repository-local .venv after setup.sh
 # Environment: Local generated repository. Remote SSH execution is not supported.
-# Dependencies: scripts/lib/common.sh, ensure_setup helper, scripts/tiny_sglang_server.py, scripts/prompt_response_client.py, scripts/parse_results.py, scripts/validate_results.py, scripts/update_runtime_ledger.py, scripts/collect_hw_sw_info.sh, scripts/print_run_metadata.sh, scripts/print_metric_summary.py
+# Dependencies: scripts/lib/common.sh, ensure_setup helper, scripts/prompt_response_client.py, scripts/parse_results.py, scripts/validate_results.py, scripts/update_runtime_ledger.py, scripts/collect_hw_sw_info.sh, scripts/print_run_metadata.sh, scripts/print_metric_summary.py
 # Variables: BENCHMARK_PYTHON
 # Repository: gpu-bench-amd-sglang-prompt-response-ubu2604
 # License: Apache-2.0
@@ -27,8 +27,8 @@ Usage: bash run_benchmark.sh [OPTIONS]
 
 Workload Name:          SGLang Prompt-Response Benchmark.
 Main Goal:              Measure sequential SGLang prompt-response latency.
-Command Tools Executed: Smoke starts tiny_sglang_server.py; later profiles start
-                        sglang.launch_server, then prompt_response_client.py.
+Command Tools Executed: Every profile starts sglang.launch_server with Mistral-7B-v0.3, then
+                        prompt_response_client.py.
 
 Profiles (default: --smoke):
   --smoke                       Run smoke profile
@@ -36,13 +36,24 @@ Profiles (default: --smoke):
   --extended                    Run extended profile
 
 Parameters (override the profile's value):
-  --dtype <value>               Tensor, element, or storage data type (smoke/baseline/extended: bfloat16)
+  --dtype <value>               Tensor, element, or storage data type
+                                  all profiles: bfloat16
   --input-len <n>               Input or prompt token length (smoke 64, baseline 512, extended 1024)
-  --output-len <n>              Number of generated or output tokens (smoke 16, baseline 750, extended 5270)
-  --model-name <value>          Model or weights identifier to load (smoke/baseline/extended: mistralai/Mistral-7B-v0.3)
-  --num-prompts <n>             Total prompts or requests submitted (smoke 2, baseline 5, extended 8)
-  --max-running-requests <n>    Maximum server-side requests actively running (smoke/baseline/extended: 1)
-  --max-total-tokens <n>        Maximum server-side tokens held in the scheduling or KV-cache pool (smoke 2048, baseline 16384, extended 32768)
+  --output-len <n>              Number of generated or output tokens
+                                  smoke:    16
+                                  baseline: 750
+                                  extended: 5270
+  --model-name <value>          Model or weights identifier to load
+                                  all profiles: mistralai/Mistral-7B-v0.3
+  --num-prompts <n>             Total prompts or requests submitted
+                                  smoke:    2
+                                  baseline: 5
+                                  extended: 8
+  --max-running-requests <n>    Maximum server-side requests actively running
+                                  all profiles: 1
+  --max-total-tokens <n>        Maximum server-side tokens held in the scheduling or KV-cache pool
+                                  smoke/baseline: 16384
+                                  extended:       32768
   --seed <n>                    Random seed used for reproducibility (smoke/baseline/extended: 42)
 
 General options:
@@ -196,7 +207,7 @@ printf 'profile=%s\noutput_format=%s\n' "${PROFILE}" "${OUTPUT_FORMAT}" > "${RUN
 export PYTHONUNBUFFERED=1
 export PATH="/opt/rocm/bin:/opt/rocm/core-10.1/bin:${PATH}"
 export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:${LD_LIBRARY_PATH:-}"
-export BENCHMARK_READY_WAIT_SEC="${BENCHMARK_READY_WAIT_SEC:-600}"
+export BENCHMARK_READY_WAIT_SEC="${BENCHMARK_READY_WAIT_SEC:-1800}"
 cp run_benchmark.sh "${RUN_DIR}/script.sh"
 mask_environment "${RUN_DIR}/env_variables.txt"
 : > "${RUN_DIR}/run.log"
@@ -207,41 +218,36 @@ run_collection() {
   export HF_HOME="${HF_HOME:-${HOME}/.cache/huggingface}"
   mkdir -p "${HF_HOME}"
   local server_cmd=""
-  if [[ "${PROFILE}" == "smoke" ]]; then
-    export BENCHMARK_SERVER_KIND=stub
-    server_cmd="${PYTHON_BIN} scripts/tiny_sglang_server.py --host 127.0.0.1 --port 30000 --model-name ${MODEL_NAME}"
-  else
-    if ! "${PYTHON_BIN}" -c "import sglang" >/dev/null 2>&1; then
-      die "sglang is not installed in .venv. Re-run: BENCHMARK_COMPILE_SGLANG=1 bash setup.sh --assume-yes"
-    fi
-    if ! "${PYTHON_BIN}" -c "import aiter" >/dev/null 2>&1; then
-      die "aiter is not installed; AMD SGLang baseline/extended require AITER."
-    fi
-    if [[ -f "${REPO_ROOT}/scripts/patch_aiter_gfx1250_optional.py" ]]; then
-      "${PYTHON_BIN}" "${REPO_ROOT}/scripts/patch_aiter_gfx1250_optional.py" ||
-        die "AITER gfx1250 optional-import patch failed."
-    fi
-    if [[ -f "${REPO_ROOT}/scripts/patch_triton_gluon_gfx1250_optional.py" ]]; then
-      "${PYTHON_BIN}" "${REPO_ROOT}/scripts/patch_triton_gluon_gfx1250_optional.py" ||
-        die "Triton gluon gfx1250 optional-import patch failed."
-    fi
-    export SGLANG_USE_AITER=1
-    export PATH="/opt/rocm/bin:/opt/rocm/core-10.1/bin:${PATH}"
-    export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:${LD_LIBRARY_PATH:-}"
-    export BENCHMARK_READY_WAIT_SEC="${BENCHMARK_READY_WAIT_SEC:-1800}"
-    # Same AITER first-decode hang as 331: leftover lock_module_* plus the
-    # default 300s watchdog. 430/431 set --tp/--mem-fraction-static; AMD
-    # also needs --disable-cuda-graph and a longer watchdog.
-    find "${VENV_ROOT:-${REPO_ROOT}/.venv}/lib" -name 'lock_module_*' -delete 2>/dev/null || true
-    rm -f /tmp/aiter_configs/*.lock 2>/dev/null || true
-    # A consolidated.safetensors cache is not a finished shard set. Download the
-    # index shards and launch with that snapshot directory, not the repo id.
-    sglang_model_path="$("${PYTHON_BIN}" scripts/prefetch_sglang_model.py --model-id "${MODEL_NAME}" | tail -n 1)"
-    if [[ -z "${sglang_model_path}" || ! -d "${sglang_model_path}" ]]; then
-      die "SGLang shard prefetch did not return a snapshot directory"
-    fi
-    server_cmd="${PYTHON_BIN} -m sglang.launch_server --model-path ${sglang_model_path} --dtype ${DTYPE} --port 30000 --host 127.0.0.1 --tp 1 --mem-fraction-static 0.8 --max-total-tokens ${MAX_TOTAL_TOKENS} --max-running-requests ${MAX_RUNNING_REQUESTS} --disable-cuda-graph --watchdog-timeout 1800 --enable-cache-report"
+  if ! "${PYTHON_BIN}" -c "import sglang" >/dev/null 2>&1; then
+    die "sglang is not installed in .venv. Re-run: BENCHMARK_COMPILE_SGLANG=1 bash setup.sh --assume-yes"
   fi
+  if ! "${PYTHON_BIN}" -c "import aiter" >/dev/null 2>&1; then
+    die "aiter is not installed; AMD SGLang requires AITER."
+  fi
+  if [[ -f "${REPO_ROOT}/scripts/patch_aiter_gfx1250_optional.py" ]]; then
+    "${PYTHON_BIN}" "${REPO_ROOT}/scripts/patch_aiter_gfx1250_optional.py" ||
+      die "AITER gfx1250 optional-import patch failed."
+  fi
+  if [[ -f "${REPO_ROOT}/scripts/patch_triton_gluon_gfx1250_optional.py" ]]; then
+    "${PYTHON_BIN}" "${REPO_ROOT}/scripts/patch_triton_gluon_gfx1250_optional.py" ||
+      die "Triton gluon gfx1250 optional-import patch failed."
+  fi
+  export SGLANG_USE_AITER=1
+  export PATH="/opt/rocm/bin:/opt/rocm/core-10.1/bin:${PATH}"
+  export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:${LD_LIBRARY_PATH:-}"
+  export BENCHMARK_READY_WAIT_SEC="${BENCHMARK_READY_WAIT_SEC:-1800}"
+  # Same AITER first-decode hang as 331: leftover lock_module_* plus the
+  # default 300s watchdog. 430/431 set --tp/--mem-fraction-static; AMD
+  # also needs --disable-cuda-graph and a longer watchdog.
+  find "${VENV_ROOT:-${REPO_ROOT}/.venv}/lib" -name 'lock_module_*' -delete 2>/dev/null || true
+  rm -f /tmp/aiter_configs/*.lock 2>/dev/null || true
+  # A consolidated.safetensors cache is not a finished shard set. Download the
+  # index shards and launch with that snapshot directory, not the repo id.
+  sglang_model_path="$("${PYTHON_BIN}" scripts/prefetch_sglang_model.py --model-id "${MODEL_NAME}" | tail -n 1)"
+  if [[ -z "${sglang_model_path}" || ! -d "${sglang_model_path}" ]]; then
+    die "SGLang shard prefetch did not return a snapshot directory"
+  fi
+  server_cmd="${PYTHON_BIN} -m sglang.launch_server --model-path ${sglang_model_path} --dtype ${DTYPE} --port 30000 --host 127.0.0.1 --tp 1 --mem-fraction-static 0.8 --max-total-tokens ${MAX_TOTAL_TOKENS} --max-running-requests ${MAX_RUNNING_REQUESTS} --disable-cuda-graph --watchdog-timeout 1800 --enable-cache-report"
   log_run "${server_cmd}"
   echo "${server_cmd}" >> "${COMMAND_LOG}"
   bash -c "${server_cmd}" >> "${RUN_DIR}/server.log" 2>&1 &

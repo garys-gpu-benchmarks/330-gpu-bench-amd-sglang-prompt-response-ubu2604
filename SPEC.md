@@ -2,7 +2,7 @@
 
 ## Execution Description
 
-Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on baseline/extended (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py. output_format: csv. Sweep dimensions: dtype, input_len, output_len, model_name, num_prompts, max_running_requests, max_total_tokens, seed.
+Starts python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on every profile (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py. output_format: csv. Sweep dimensions: dtype, input_len, output_len, model_name, num_prompts, max_running_requests, max_total_tokens, seed.
 
 ## Parameters
 
@@ -14,13 +14,13 @@ Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mi
 | model_name | `--model-name` | smoke=mistralai/Mistral-7B-v0.3, baseline=mistralai/Mistral-7B-v0.3, extended=mistralai/Mistral-7B-v0.3 | mistralai/Mistral-7B-v0.3 | From Parameter list; see Execution Description With Parameters. |
 | num_prompts | `--num-prompts` | smoke=2, baseline=5, extended=8 | 5 | From Parameter list; see Execution Description With Parameters. |
 | max_running_requests | `--max-running-requests` | smoke=1, baseline=1, extended=1 | 1 | From Parameter list; see Execution Description With Parameters. |
-| max_total_tokens | `--max-total-tokens` | smoke=2048, baseline=16384, extended=32768 | 16384 | From Parameter list; see Execution Description With Parameters. |
+| max_total_tokens | `--max-total-tokens` | smoke=16384, baseline=16384, extended=32768 | 16384 | From Parameter list; see Execution Description With Parameters. |
 | seed | `--seed` | smoke=42, baseline=42, extended=42 | 42 | From Parameter list; see Execution Description With Parameters. |
 
 ## Invocation
 
 ```bash
-Smoke starts tiny_sglang_server.py; later profiles start sglang.launch_server, then prompt_response_client.py
+Every profile starts sglang.launch_server with Mistral-7B-v0.3, then prompt_response_client.py
 ```
 
 ## Raw Output Format
@@ -40,16 +40,16 @@ request_id,sample_index,status,input_tokens,output_tokens,end_to_end_latency_ms,
 
 ## Framework
 
-Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on baseline/extended (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py.
+Starts python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on every profile (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py.
 
 ## Installation and Execution Summary
 
-Launch scripts/tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mistral-7B-v0.3 on baseline and extended, on 127.0.0.1:30000. Then run scripts/prompt_response_client.py one request at a time, to measure sequential prompt-response latency. This is not bench_serving.py
+On every profile, launch python -m sglang.launch_server with Mistral-7B-v0.3 on 127.0.0.1:30000. Then run scripts/prompt_response_client.py one request at a time, to measure sequential prompt-response latency. This is not bench_serving.py
 
 ## Platform Portability
 
 - **AMD (primary):** ```bash
-Smoke starts tiny_sglang_server.py; later profiles start sglang.launch_server, then prompt_response_client.py
+Every profile starts sglang.launch_server with Mistral-7B-v0.3, then prompt_response_client.py
 ```
 - **NVIDIA:** Primary target is AMD ROCm. NVIDIA notes in this section are reference only and are not the execution path.
 
@@ -100,10 +100,10 @@ bash run_benchmark.sh --extended
 2. `run.error_message` is NULL.
 3. `started_at` and `finished_at` are valid ISO-8601 UTC strings.
 4. All required aggregate metrics in `runs` are non-NULL and finite.
-5. All required aggregate metrics are physically sensible (positive values). Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on baseline/extended (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py.
+5. All required aggregate metrics are physically sensible (positive values). Starts python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on every profile (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py.
 6. At least 2 sample rows exist for the latest `run_id` (sweep coverage).
 7. No sample has `status = 'error'`.
-8. Starts tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on baseline/extended (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py.
+8. Starts python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on every profile (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py.
 
 ### Baseline / Threshold configuration (`config/benchmark_config.yaml`)
 

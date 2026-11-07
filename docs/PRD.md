@@ -15,13 +15,13 @@ This PRD.md section is populated from benchmark_specification.json, which is the
 SGLang Prompt-Response Benchmark
 
 ## Execution Summary (Run and Measure)
-Launch scripts/tiny_sglang_server.py on smoke, or python -m sglang.launch_server with Mistral-7B-v0.3 on baseline and extended, on 127.0.0.1:30000. Then run scripts/prompt_response_client.py one request at a time, to measure sequential prompt-response latency. This is not bench_serving.py
+On every profile, launch python -m sglang.launch_server with Mistral-7B-v0.3 on 127.0.0.1:30000. Then run scripts/prompt_response_client.py one request at a time, to measure sequential prompt-response latency. This is not bench_serving.py
 
 ## Main Goal
 Measure sequential SGLang prompt-response latency
 
 ## Validation Objective
-Validates one-at-a-time SGLang prompt latency, token rate, and cache hits. Smoke uses the tiny server
+Validates one-at-a-time SGLang prompt latency, token rate, and cache hits
 
 ## Workload Category
 LLM Inference & Serving
