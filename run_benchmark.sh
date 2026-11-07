@@ -22,12 +22,11 @@ capture_benchmark_run_command_submitted "$@"
 
 usage() {
   cat <<'USAGE'
+
 Usage: bash run_benchmark.sh [OPTIONS]
 
 Workload Name:          SGLang Prompt-Response Benchmark.
 Main Goal:              Measure sequential SGLang prompt-response latency.
-Validation Objective:   Validates one-at-a-time SGLang prompt latency, token rate, and cache hits.
-                        Smoke uses the tiny server.
 Command Tools Executed: Smoke starts tiny_sglang_server.py; later profiles start
                         sglang.launch_server, then prompt_response_client.py.
 
