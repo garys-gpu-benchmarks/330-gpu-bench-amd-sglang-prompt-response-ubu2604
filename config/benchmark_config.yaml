@@ -22,7 +22,7 @@ sweep:
     extended: 8
   max_running_requests: 1
   max_total_tokens:
-    smoke: 16384
+    smoke: 1024
     baseline: 16384
     extended: 32768
   seed: 42

@@ -14,7 +14,7 @@ Starts python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on e
 | model_name | `--model-name` | smoke=mistralai/Mistral-7B-v0.3, baseline=mistralai/Mistral-7B-v0.3, extended=mistralai/Mistral-7B-v0.3 | mistralai/Mistral-7B-v0.3 | From Parameter list; see Execution Description With Parameters. |
 | num_prompts | `--num-prompts` | smoke=2, baseline=5, extended=8 | 5 | From Parameter list; see Execution Description With Parameters. |
 | max_running_requests | `--max-running-requests` | smoke=1, baseline=1, extended=1 | 1 | From Parameter list; see Execution Description With Parameters. |
-| max_total_tokens | `--max-total-tokens` | smoke=16384, baseline=16384, extended=32768 | 16384 | From Parameter list; see Execution Description With Parameters. |
+| max_total_tokens | `--max-total-tokens` | smoke=1024, baseline=16384, extended=32768 | 16384 | From Parameter list; see Execution Description With Parameters. |
 | seed | `--seed` | smoke=42, baseline=42, extended=42 | 42 | From Parameter list; see Execution Description With Parameters. |
 
 ## Invocation

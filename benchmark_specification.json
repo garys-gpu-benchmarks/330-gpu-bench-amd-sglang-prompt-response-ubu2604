@@ -147,7 +147,7 @@
   {
     "field_name": "run_benchmark Command Plus Options for Smoke Run (One minute or less)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "bash run_benchmark.sh --smoke --validate --dtype bfloat16 --input-len 64 --output-len 16 --model-name mistralai/Mistral-7B-v0.3 --num-prompts 2 --max-running-requests 1 --max-total-tokens 16384 --seed 42"
+    "value": "bash run_benchmark.sh --smoke --validate --dtype bfloat16 --input-len 64 --output-len 16 --model-name mistralai/Mistral-7B-v0.3 --num-prompts 2 --max-running-requests 1 --max-total-tokens 1024 --seed 42"
   },
   {
     "field_name": "run_benchmark Command Plus Options for Baseline Run (3 to 5 minutes)",
@@ -205,14 +205,14 @@
     "value": "MI300X"
   },
   {
-    "field_name": "Raw Output Format",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "CSV with one row per prompt, plus a printed summary line"
-  },
-  {
     "field_name": "Primary Record Granularity",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "one CSV row per sequential request"
+  },
+  {
+    "field_name": "Raw Output Format",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "CSV with one row per prompt, plus a printed summary line"
   },
   {
     "field_name": "Raw Output Example",
@@ -225,14 +225,14 @@
     "value": "end_to_end_latency_ms, ttft_ms, output_tokens_per_s, completed_request_rate_pct, radixattention_cache_hit_rate_pct"
   },
   {
-    "field_name": "Success Criteria",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "server readiness succeeds and at least one request completes; successful rows have finite positive end_to_end_latency_ms and, when streaming, TTFT <= end-to-end latency. Failed requests lower completed_request_rate_pct; the run fails only if every request fails"
-  },
-  {
     "field_name": "Parser and Normalization Notes",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "Locked overlay parse_results.py. Summaries use successful requests only: end-to-end latency, TTFT and output_tokens_per_s are the median (p50) of the timed requests, so one slow request cannot dominate. output_tokens_per_s is the decode rate, (output tokens - 1) / (end-to-end - TTFT); output tokens are the server's usage.completion_tokens, else the streamed text-chunk count. RadixAttention hit rate = total cached prompt tokens / total prompt tokens over successful requests (usage.prompt_tokens_details.cached_tokens, returned with --enable-cache-report); prompts share a common first half by design, so about 50% is expected once warm. completed_request_rate_pct = successful / attempted requests. Unmeasured values read na (reason): no cached counts (the server did not report them), no streaming (TTFT and decode rate), request failed"
+  },
+  {
+    "field_name": "Success Criteria",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "server readiness succeeds and at least one request completes; successful rows have finite positive end_to_end_latency_ms and, when streaming, TTFT <= end-to-end latency. Failed requests lower completed_request_rate_pct; the run fails only if every request fails"
   },
   {
     "field_name": "Hardware Config",
@@ -412,7 +412,7 @@
   {
     "field_name": "Profile Parameter Values",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Parameters_SmokeBaselineExtend",
-    "value": "{\"dtype\": {\"smoke\": \"bfloat16\", \"baseline\": \"bfloat16\", \"extended\": \"bfloat16\"}, \"input_len\": {\"smoke\": \"64\", \"baseline\": \"512\", \"extended\": \"1024\"}, \"output_len\": {\"smoke\": \"16\", \"baseline\": \"750\", \"extended\": \"5270\"}, \"model_name\": {\"smoke\": \"mistralai/Mistral-7B-v0.3\", \"baseline\": \"mistralai/Mistral-7B-v0.3\", \"extended\": \"mistralai/Mistral-7B-v0.3\"}, \"num_prompts\": {\"smoke\": \"2\", \"baseline\": \"5\", \"extended\": \"8\"}, \"max_running_requests\": {\"smoke\": \"1\", \"baseline\": \"1\", \"extended\": \"1\"}, \"max_total_tokens\": {\"smoke\": \"16384\", \"baseline\": \"16384\", \"extended\": \"32768\"}, \"seed\": {\"smoke\": \"42\", \"baseline\": \"42\", \"extended\": \"42\"}}"
+    "value": "{\"dtype\": {\"smoke\": \"bfloat16\", \"baseline\": \"bfloat16\", \"extended\": \"bfloat16\"}, \"input_len\": {\"smoke\": \"64\", \"baseline\": \"512\", \"extended\": \"1024\"}, \"output_len\": {\"smoke\": \"16\", \"baseline\": \"750\", \"extended\": \"5270\"}, \"model_name\": {\"smoke\": \"mistralai/Mistral-7B-v0.3\", \"baseline\": \"mistralai/Mistral-7B-v0.3\", \"extended\": \"mistralai/Mistral-7B-v0.3\"}, \"num_prompts\": {\"smoke\": \"2\", \"baseline\": \"5\", \"extended\": \"8\"}, \"max_running_requests\": {\"smoke\": \"1\", \"baseline\": \"1\", \"extended\": \"1\"}, \"max_total_tokens\": {\"smoke\": \"1024\", \"baseline\": \"16384\", \"extended\": \"32768\"}, \"seed\": {\"smoke\": \"42\", \"baseline\": \"42\", \"extended\": \"42\"}}"
   },
   {
     "field_name": "Profile Command Authorship",

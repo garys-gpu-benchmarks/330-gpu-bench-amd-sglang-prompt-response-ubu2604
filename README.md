@@ -20,7 +20,7 @@ bash run_benchmark.sh --smoke
 
 For this LLM serving workload, `--baseline` and `--extended` start the real model server, wait for it to be ready, run the client, and stop the server.
 
-The model `mistralai/Mistral-7B-v0.3` is gated on Hugging Face. Set `HF_TOKEN` before setup (see [Troubleshooting](#troubleshooting)).
+The model `mistralai/Mistral-7B-v0.3` may be gated on Hugging Face. If its download is refused, set `HF_TOKEN` (see [Troubleshooting](#troubleshooting)).
 
 ## Profiles and Parameters
 
@@ -32,7 +32,7 @@ The model `mistralai/Mistral-7B-v0.3` is gated on Hugging Face. Set `HF_TOKEN` b
 | `model_name` | `--model-name` | mistralai/Mistral-7B-v0.3 | mistralai/Mistral-7B-v0.3 | mistralai/Mistral-7B-v0.3 |
 | `num_prompts` | `--num-prompts` | 2 | 5 | 8 |
 | `max_running_requests` | `--max-running-requests` | 1 | 1 | 1 |
-| `max_total_tokens` | `--max-total-tokens` | 16384 | 16384 | 32768 |
+| `max_total_tokens` | `--max-total-tokens` | 1024 | 16384 | 32768 |
 | `seed` | `--seed` | 42 | 42 | 42 |
 
 Pick a profile with `--smoke` (default), `--baseline` or `--extended`. Any flag in the table overrides that profile's value:
@@ -100,7 +100,7 @@ Other platforms: [AMD 24.04](https://github.com/garys-gpu-benchmarks/bundle-amd-
 
 - **The SSH session closed during setup:** the first AMD workload on a fresh host may reboot once to load the AMD GPU driver. Setup prints a 30-second warning first and resumes by itself after boot. SSH back in and run `tail -f results/reboot_resume.log`; when it prints `SETUP COMPLETE`, run your command again. Do not start `setup.sh` again while it is resuming.
 - **SSH dropped for another reason:** reconnect and run `sudo bash setup.sh --assume-yes` again. It resumes; do not delete `.venv` or `.cache`.
-- **Model download refused (401 or 403):** `mistralai/Mistral-7B-v0.3` is gated. Accept its license on Hugging Face, then `export HF_TOKEN=<token>` and run setup with `sudo -E bash setup.sh --assume-yes` so the token reaches it.
+- **Model download refused (401 or 403):** `mistralai/Mistral-7B-v0.3` may be gated. Accept its license on Hugging Face, then `export HF_TOKEN=<token>` and run setup with `sudo -E bash setup.sh --assume-yes` so the token reaches it.
 - **A metric reads `na`:** the run could not measure it on this host. The reason is in the run's `metrics_summary.txt` and `errors_info.txt`; see also [Notes](#notes).
 
 ## Repository Layout
