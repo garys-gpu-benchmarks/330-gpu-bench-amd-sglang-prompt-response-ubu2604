@@ -40,6 +40,11 @@
     "value": "Every profile starts sglang.launch_server with Mistral-7B-v0.3, then prompt_response_client.py"
   },
   {
+    "field_name": "Execution Description With Parameters",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Starts python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on every profile (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py. output_format: csv. model_name: model id the server prefetches and the client requests. max_running_requests: SGLang --max-running-requests limit. max_total_tokens: SGLang --max-total-tokens budget"
+  },
+  {
     "field_name": "Metrics",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "#1: E2E latency p50, ms (end_to_end_latency_ms); #2: Time To First Token p50, ms (ttft_ms); #3: Output token generation rate (decode) p50, tokens/s (output_tokens_per_s); #4: RadixAttn hit rate, pct (radixattention_cache_hit_rate_pct); #5: Completed request rate, pct (completed_request_rate_pct)"
@@ -173,11 +178,6 @@
     "field_name": "Command Methodology",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "On every profile, start python -m sglang.launch_server with Mistral-7B-v0.3 on 127.0.0.1:30000. Then submit prompts one at a time with scripts/prompt_response_client.py and record end-to-end latency, TTFT, and output tokens/s. This is not bench_serving.py"
-  },
-  {
-    "field_name": "Execution Description With Parameters",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Starts python -m sglang.launch_server with Mistral-7B-v0.3 --dtype bfloat16 on every profile (port 30000, aiter enabled). Then runs scripts/prompt_response_client.py sequentially. Do not use bench_serving.py. output_format: csv. model_name: model id the server prefetches and the client requests. max_running_requests: SGLang --max-running-requests limit. max_total_tokens: SGLang --max-total-tokens budget"
   },
   {
     "field_name": "Execution Domain",
